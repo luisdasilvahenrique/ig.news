@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import Stripe from 'stripe';
 import { version as vers } from '../../package.json';
 
