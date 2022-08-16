@@ -9,7 +9,7 @@ interface IManageSubscriptionsData {
   createAction: boolean
 }
 
-export async function manageSubscriptions({
+export async function saveSubscriptions({
   subscriptionId,
   customerId,
   createAction = false

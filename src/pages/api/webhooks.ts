@@ -3,7 +3,7 @@ import { Readable } from 'stream'
 import Stripe from 'stripe'
 
 import { stripe } from '../../services/stripe'
-import { manageSubscriptions } from './_lib/manageSubscriptions'
+import { saveSubscriptions } from './_lib/manageSubscriptions'
 
 // Config to enable streams reading
 export const config = {
@@ -57,7 +57,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           case 'customer.subscription.deleted':
             const subscription = stripeEvent.data.object as Stripe.Subscription
 
-            await manageSubscriptions({
+            await saveSubscriptions({
               subscriptionId: subscription.id,
               customerId: subscription.customer.toString(),
               createAction: type === 'customer.subscription.created'
@@ -69,7 +69,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             const checkoutSession = stripeEvent.data
               .object as Stripe.Checkout.Session
 
-            await manageSubscriptions({
+            await saveSubscriptions({
               subscriptionId: checkoutSession.subscription.toString(),
               customerId: checkoutSession.customer.toString(),
               createAction: true
@@ -81,9 +81,6 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             throw new Error('Unhandled Stripe event.')
         }
       } catch (err) {
-        /** This response will be send to Stripe, if we put an error status code
-        here, the Stripe API will understand the request as failed, then, a new
-        webhook will be sent to us, many times */
         return response.json({ error: 'Webhook handle failed.' })
       }
     }
