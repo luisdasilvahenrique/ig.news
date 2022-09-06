@@ -27,7 +27,7 @@ const relevantEvents = new Set([
   'checkout.session.completed',
   'customer.subscription.created',
   'customer.subscription.updated',
-  'customer.subscription.deleted'
+  'customer.subscription.deleted',
 ])
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
@@ -41,7 +41,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       stripeEvent = stripe.webhooks.constructEvent(
         buff,
         stripeSignature,
-        process.env.STRIPE_WEBHOOK_SECRET
+        process.env.STRIPE_WEBHOOK_SECRET,
       )
     } catch (err) {
       return response.status(400).send(`Webhook error: ${err.message}`)

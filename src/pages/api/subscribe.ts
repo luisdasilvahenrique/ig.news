@@ -6,13 +6,12 @@ import { stripe } from "../../services/stripe";
 
 type User = {
     ref: {
-        id: string;
+      id: string;
     }
     data: {
-        stripe_customer_id: string;
+      stripe_customer_id: string;
     }
-}
-
+  }
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const session = await getSession({ req });
