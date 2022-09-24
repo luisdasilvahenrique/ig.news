@@ -51,4 +51,5 @@ export async function saveSubscriptions({
       )
     )
   }
+  console.log(subscriptionId)
 }
