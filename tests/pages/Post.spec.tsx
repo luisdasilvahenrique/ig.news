@@ -12,14 +12,14 @@ const post = {
 };
 
 jest.mock("next-auth/react");
-jest.mock('../../services/prismic');
+jest.mock('../../src/services/prismic');
 
 describe("Posts page", () => {
   it("renders correctly", () => {
     render(<Post post={post} />);
 
     expect(screen.getByText("My new post")).toBeInTheDocument();
-    expect(screen.getByText("Post excerpet")).toBeInTheDocument();
+    expect(screen.getByText("Post content")).toBeInTheDocument();
   });
 
   it("redirects user if no subscription is found", async () => {
@@ -60,7 +60,6 @@ describe("Posts page", () => {
     const response =  getServerSideProps({
       params: { slug: "my-new-post" },
     } as any);
-
 
 
     expect(response).toEqual(

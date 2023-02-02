@@ -1,18 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import Posts, { getStaticProps } from "../../src/pages/Posts";
-import { getPrismicClient } from "../../src/services/prismic";
+import { getPrismicClient } from '../../src/services/prismic';
 
 const posts = [
   { 
-    slug: 'post-1', 
-    title: 'new post', 
-    excerpt: 'this is the excerpt for this new post', 
-    updatedAt: '2022-05-16'
+    slug: 'my-new-post', 
+    title: 'My new post', 
+    excerpt: '<p>Post excerpt</p>', 
+    updatedAt: '18 de Abril'
   },
 ]
 
-jest.mock('../../services/prismic');
+jest.mock('../../src/services/prismic');
 
 describe("Posts page", () => {
   it("renders correctly", () => {
@@ -25,7 +25,7 @@ describe("Posts page", () => {
     const getPrismicClientMocked = mocked(getPrismicClient);
 
     getPrismicClientMocked.mockReturnValueOnce({
-        query: jest.fn().mockResolvedValueOnce({
+      getByUID: jest.fn().mockResolvedValueOnce({
             results: [
                 {
                     uid: 'my-new-post',
