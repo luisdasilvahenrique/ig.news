@@ -26,7 +26,7 @@ describe("Home page", () => {
   it("load initial data", async () => {
     const retriveStripeMocked = mocked(stripe.prices.retrieve);
 
-    retriveStripeMocked.mockResolvedValueOnce({
+    retriveStripeMocked.mockReturnValueOnce({
       id: "fake-price-id",
       unit_amount: 1000,
     } as any);

@@ -64,7 +64,7 @@ export const getStaticProps: GetStaticProps = async () => {
         };
     });
 
-    console.log(posts)
+    // console.log(posts)
     // como debugar qualquer coisa  console.log(JSON.stringify(respose, null, 2));
 
     return {

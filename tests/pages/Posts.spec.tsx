@@ -4,53 +4,56 @@ import Posts, { getStaticProps } from "../../src/pages/Posts";
 import { getPrismicClient } from "../../src/services/prismic";
 
 const posts = [
-  {
-    slug: "my-new-post",
-    title: "my-new-post",
-    excerpt: "Post-excerpet",
-    updatedAt: "02 de fevereiro",
+  { 
+    slug: 'post-1', 
+    title: 'new post', 
+    excerpt: 'this is the excerpt for this new post', 
+    updatedAt: '2022-05-16'
   },
-];
+]
 
-jest.mock("../../src/services/prismic.ts");
+jest.mock('../../services/prismic');
 
 describe("Posts page", () => {
   it("renders correctly", () => {
     render(<Posts posts={posts} />);
 
-    expect(screen.getByText("my-new-post")).toBeInTheDocument();
+    expect(screen.getByText("My New Post")).toBeInTheDocument();
   });
 
-  it("load initial data", async () => {
-    const getPrismicMocked = mocked(getPrismicClient);
+  it("loads initial data", async () => {
+    const getPrismicClientMocked = mocked(getPrismicClient);
 
-    getPrismicMocked.mockRejectedValueOnce({
-      query: jest.fn().mockResolvedValueOnce({
-        results: [
-          {
-            uid: "my-new-post",
-            data: {
-              title: [{ type: "heading", text: "My new post" }],
-              content: [{ type: "paragraph", text: "Post excerpt" }],
-            },
-            last_publication_date: "02-02-2023",
-          },
-        ],
-      }),
-    } as never);
+    getPrismicClientMocked.mockReturnValueOnce({
+        query: jest.fn().mockResolvedValueOnce({
+            results: [
+                {
+                    uid: 'my-new-post',
+                    data: {
+                        title: [
+                            { type: 'heading' , text: 'My new post'}
+                        ],
+                        content: [
+                            { type: 'paragraph', text: 'Post excerpt'}
+                        ]
+                    },
+                    last_publication_date: '04-01-2021',
+                }
+            ]
+        })
+    }as any)
 
-    const response = getStaticProps({});
+    const response = await getStaticProps({});
 
     expect(response).toEqual(
       expect.objectContaining({
         props: {
-          posts: [
-            {
-              slug: "my-new-post",
-              title: "my-new-post",
-              excerpt: "excerpt",
-              updatedAt: "02 de feveiro de 2023",
-            }],
+          posts: [{
+            slug: 'my-new-post',
+            title: 'My new post',
+            excerpt: 'Post excerpt',
+            updatedAt: '01 de abril de 2021'
+          }],
         },
       })
     );
