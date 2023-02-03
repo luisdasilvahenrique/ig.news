@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -72,8 +72,11 @@ describe("Post preview page", () => {
             })
         }as any)
     
-        const response = await getStaticProps({ params: { slug: 'my-new-post' } })
+        const response = await waitFor(()=> {
+          getStaticProps({ params: { slug: 'my-new-post' } })
+        }) 
     
+       waitFor(() => {
         expect(response).toEqual(
           expect.objectContaining({
             props: {
@@ -86,6 +89,7 @@ describe("Post preview page", () => {
             },
           })
         );
+       }) 
       });
 
 });

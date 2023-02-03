@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import Home, { getStaticProps } from "../../src/pages";
 import { stripe } from "../../src/services/stripe";
 import { mocked } from "jest-mock";
@@ -33,15 +33,18 @@ describe("Home page", () => {
 
     const response = await getStaticProps({});
 
-    expect(response).toEqual(
-      expect.objectContaining({
-        props: {
-          product: {
-            priceId: "fake-price-id",
-            amount: "$10.00",
+    await waitFor(() => {
+      expect(response).toEqual(
+        expect.objectContaining({
+          props: {
+            product: {
+              priceId: "fake-price-id",
+              amount: "$10.00",
+            },
           },
-        },
-      })
-    );
+        })
+      );
+    })
+    
   });
 });
