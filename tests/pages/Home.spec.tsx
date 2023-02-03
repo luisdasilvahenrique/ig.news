@@ -1,50 +1,46 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import Home, { getStaticProps } from "../../src/pages";
-import { stripe } from "../../src/services/stripe";
-import { mocked } from "jest-mock";
+import { render, screen } from '@testing-library/react';
 
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
+import { mocked } from 'jest-mock';
+
+import { stripe } from '../../src/services/stripe';
+
+import Home, { getStaticProps } from '../../src/pages';
+
+jest.mock('next/router');
+
+jest.mock('next-auth/client', () => ({
+  useSession: () => [null, false],
 }));
 
-jest.mock("next-auth/react", () => {
-  return {
-    useSession: () => [null, false],
-  };
-});
+jest.mock('../../services/stripe');
 
-jest.mock("../../src/services/stripe");
+describe('Home page', () => {
+  it('should render the home page', () => {
+    render(<Home product={{ priceId: 'fake-price-id', amount: 'R$10,00' }} />);
 
-describe("Home page", () => {
-  it("renders correctly", () => {
-    jest.mock("next/router", () => require("next-router-mock"));
-    render(<Home product={{ priceId: "fake-price-id", amount: "R$10,00" }} />);
-
-    expect(screen.getByText("for R$10,00 month")).toBeInTheDocument();
+    expect(screen.getByText('for R$10,00 month')).toBeInTheDocument();
   });
 
-  it("load initial data", async () => {
-    const retriveStripeMocked = mocked(stripe.prices.retrieve);
+  it('loads initial data', async () => {
+    const retrieveStripePricesMocked = mocked(stripe.prices.retrieve);
 
-    retriveStripeMocked.mockReturnValueOnce({
-      id: "fake-price-id",
+    // quando a função for uma promise user mockResolvedValue
+    retrieveStripePricesMocked.mockResolvedValue({
+      id: 'fake-price-id',
       unit_amount: 1000,
     } as any);
 
     const response = await getStaticProps({});
 
-    await waitFor(() => {
-      expect(response).toEqual(
-        expect.objectContaining({
-          props: {
-            product: {
-              priceId: "fake-price-id",
-              amount: "$10.00",
-            },
+    expect(response).toEqual(
+      expect.objectContaining({
+        props: {
+          product: {
+            priceId: 'fake-price-id',
+            amount: '$10.00',
           },
-        })
-      );
-    })
-    
+        },
+      }),
+    );
   });
 });
