@@ -14,8 +14,25 @@ const post =
     updatedAt: '18 de Abril'
   }
 
+  jest.mock('next/router', () => ({
+    useRouter() {
+      return ({
+        route: '/',
+        pathname: '',
+        query: '',
+        asPath: '',
+        push: jest.fn(),
+        events: {
+          on: jest.fn(),
+          off: jest.fn()
+        },
+        beforePopState: jest.fn(() => null),
+        prefetch: jest.fn(() => null)
+      });
+    },
+  }));
+
 jest.mock('next-auth/react')
-jest.mock('next/router')
 jest.mock('../../src/services/prismic');
 
 describe("Post preview page", () => {

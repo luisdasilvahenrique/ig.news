@@ -9,5 +9,13 @@ module.exports = {
     testEnvironment: 'jsdom',
     moduleNameMapper: {
         "\\.(scss|css|sass)$": "identity-obj-proxy"
-    }
+    },
+    
+    collectionCoverage: true,
+    collectionCoverageFrom: [
+        "src/**/*.tsx",
+        "!src/**/*.spec.tsx"
+    ],
+    coverageReportes: ["lcov", "json"]
+    // para testar basta executar "yarn test --coverage"
 };
