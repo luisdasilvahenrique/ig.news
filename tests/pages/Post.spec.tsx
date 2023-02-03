@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { getSession } from "next-auth/react";
 import Post, { getServerSideProps } from "../../src/pages/Posts/[slug]";
@@ -40,7 +40,7 @@ describe("Posts page", () => {
     );
   });
 
-  it("loads initial data", () => {
+  it("loads initial data", async () => {
     const getServerMocked = mocked(getSession);
     const getPrismicClientMocked = mocked(getPrismicClient);
     getPrismicClientMocked.mockReturnValueOnce({
@@ -57,10 +57,9 @@ describe("Posts page", () => {
       activeSubcription: "fake-active-subscription",
     } as any);
 
-    const response =  getServerSideProps({
+    const response = await getServerSideProps({
       params: { slug: "my-new-post" },
     } as any);
-
 
     expect(response).toEqual(
       expect.objectContaining({

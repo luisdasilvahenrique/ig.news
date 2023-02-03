@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import Posts, { getStaticProps } from "../../src/pages/Posts";
 import { getPrismicClient } from '../../src/services/prismic';
@@ -44,7 +44,7 @@ describe("Posts page", () => {
     }as any)
 
     const response = await getStaticProps({});
-
+   
     expect(response).toEqual(
       expect.objectContaining({
         props: {
@@ -57,5 +57,6 @@ describe("Posts page", () => {
         },
       })
     );
+   
   });
 });

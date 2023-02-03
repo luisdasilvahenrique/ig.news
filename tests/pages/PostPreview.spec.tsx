@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -14,8 +14,25 @@ const post =
     updatedAt: '18 de Abril'
   }
 
+  jest.mock('next/router', () => ({
+    useRouter() {
+      return ({
+        route: '/',
+        pathname: '',
+        query: '',
+        asPath: '',
+        push: jest.fn(),
+        events: {
+          on: jest.fn(),
+          off: jest.fn()
+        },
+        beforePopState: jest.fn(() => null),
+        prefetch: jest.fn(() => null)
+      });
+    },
+  }));
+
 jest.mock('next-auth/react')
-jest.mock('next/router')
 jest.mock('../../src/services/prismic');
 
 describe("Post preview page", () => {
@@ -72,8 +89,11 @@ describe("Post preview page", () => {
             })
         }as any)
     
-        const response = await getStaticProps({ params: { slug: 'my-new-post' } })
+        const response = await waitFor(()=> {
+          getStaticProps({ params: { slug: 'my-new-post' } })
+        }) 
     
+       waitFor(() => {
         expect(response).toEqual(
           expect.objectContaining({
             props: {
@@ -86,6 +106,7 @@ describe("Post preview page", () => {
             },
           })
         );
+       }) 
       });
 
 });

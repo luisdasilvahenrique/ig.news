@@ -22,6 +22,12 @@ jest.mock("next-auth/react", () => {
 describe("Header component", () => {
   it("render correctly", () => {
     render(<Header />);
+
+    // Isto funciona quando não sei qual método devo usar para 
+    // encontrar o elemento 
+    screen.logTestingPlaygroundURL();
+
+
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Posts")).toBeInTheDocument();
   });
