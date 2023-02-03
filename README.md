@@ -63,7 +63,7 @@ yarn add jest-mock -D
 - [x] Teste do SubscribeButton
 - [x] Teste do Home/Page
 - [x] Teste do getStaticProps
-- [ ] Teste da página de posts
-- [ ] Teste da página do post
-- [ ] Teste da página de preview
+- [x] Teste da página de posts
+- [x] Teste da página do post
+- [x] Teste da página de preview
 
